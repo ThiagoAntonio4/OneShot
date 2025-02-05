@@ -7,8 +7,8 @@
 #define LED_VERDE 11
 #define PUSH_BUTTON 5
 
-bool button = true;
-uint32_t last_time = 0;
+int last_time = 0;
+bool aceso = false;
 
 void init_gpios()
 {
@@ -26,21 +26,23 @@ void init_gpios()
     gpio_pull_up(PUSH_BUTTON);
 }
 
-int64_t alarm_callback(alarm_id_t id, void *user_data)
+int64_t turn_off_callback(alarm_id_t id, void *user_data)
 {
-    if (gpio_get(LED_VERMELHO == 1))
+    if (gpio_get(LED_VERMELHO) == 1)
     {
         gpio_put(LED_VERMELHO, 0);
     }
-    else if (gpio_get(LED_AMARELO == 1))
+    else if (gpio_get(LED_AMARELO) == 1)
     {
         gpio_put(LED_AMARELO, 0);
+        aceso = true;
     }
-    else if (gpio_get(LED_VERDE == 1))
+    else if (gpio_get(LED_VERDE) == 1)
     {
         gpio_put(LED_VERDE, 0);
+        aceso = true;
     }
-return true;
+    return 0;
 }
 
 void button_irq_handler(uint gpio, uint32_t events)
@@ -53,7 +55,9 @@ void button_irq_handler(uint gpio, uint32_t events)
         gpio_put(LED_VERMELHO, 1);
         gpio_put(LED_AMARELO, 1);
         gpio_put(LED_VERDE, 1);
-        add_alarm_in_ms(3000, alarm_callback, NULL, true);
+        aceso = true;
+        add_alarm_in_ms(3000, turn_off_callback, NULL, false);
+
     }
 }
 
@@ -66,17 +70,20 @@ void set_irq()
 
 int main()
 {
-    int tempoProximo = 3;
     stdio_init_all();
     init_gpios();
     set_irq();
-    struct repeating_timer timer;
+
     while (true)
     {
-        sleep_ms(100);
-        if (LED_VERDE == 1 && LED_VERMELHO == 0)
+        if ((aceso == true && gpio_get(LED_VERDE) == 1 && gpio_get(LED_AMARELO) == 1 && gpio_get(LED_VERMELHO) == 0) || (aceso == true && gpio_get(LED_VERDE) == 1 && gpio_get(LED_VERMELHO) == 0))
         {
-            add_alarm_in_ms(3000, alarm_callback, NULL, &timer);
+            add_alarm_in_ms(3000, turn_off_callback, NULL, false);
+            aceso = false;
+        }
+        else
+        {
+            sleep_ms(1);
         }
     }
 }
