@@ -1,0 +1,67 @@
+{
+    "version": 1,
+    "author": "Thiago Antonio",
+    "editor": "wokwi",
+    "parts": [
+      { "type": "board-pi-pico-w", "id": "pico", "top": 15.95, "left": 22.75, "attrs": {} },
+      { "type": "wokwi-led", "id": "led1", "top": 92.4, "left": -121, "attrs": { "color": "red" } },
+      {
+        "type": "wokwi-led",
+        "id": "led2",
+        "top": 130.8,
+        "left": -121,
+        "attrs": { "color": "yellow" }
+      },
+      {
+        "type": "wokwi-led",
+        "id": "led3",
+        "top": 169.2,
+        "left": -121,
+        "attrs": { "color": "limegreen" }
+      },
+      {
+        "type": "wokwi-resistor",
+        "id": "r1",
+        "top": 224.75,
+        "left": -134.4,
+        "attrs": { "value": "330" }
+      },
+      {
+        "type": "wokwi-resistor",
+        "id": "r2",
+        "top": 263.15,
+        "left": -134.4,
+        "attrs": { "value": "330" }
+      },
+      {
+        "type": "wokwi-resistor",
+        "id": "r3",
+        "top": 243.95,
+        "left": -134.4,
+        "attrs": { "value": "330" }
+      },
+      {
+        "type": "wokwi-pushbutton-6mm",
+        "id": "btn1",
+        "top": 55.4,
+        "left": -86.4,
+        "attrs": { "color": "blue" }
+      }
+    ],
+    "connections": [
+      [ "pico:GP0", "$serialMonitor:RX", "", [] ],
+      [ "pico:GP1", "$serialMonitor:TX", "", [] ],
+      [ "btn1:1.r", "pico:GND.1", "black", [ "v0" ] ],
+      [ "led1:A", "pico:GP13", "red", [ "h67.2", "v47.96" ] ],
+      [ "led2:A", "pico:GP12", "gold", [ "v0" ] ],
+      [ "led3:A", "pico:GP11", "green", [ "h67.2", "v-48" ] ],
+      [ "led1:C", "r1:1", "black", [ "h-86", "v96" ] ],
+      [ "led2:C", "r3:1", "black", [ "h-86", "v76.8" ] ],
+      [ "led3:C", "r2:1", "black", [ "h-86", "v57.6" ] ],
+      [ "r3:2", "pico:GND.4", "black", [ "h56.4", "v-57.64" ] ],
+      [ "r2:2", "pico:GND.4", "black", [ "h56.4", "v-76.8", "h48" ] ],
+      [ "r1:2", "pico:GND.4", "black", [ "h56.4", "v-38.44" ] ],
+      [ "btn1:2.r", "pico:GP5", "green", [ "v10", "h87.2" ] ]
+    ],
+    "dependencies": {}
+  }
